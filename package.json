@@ -1,0 +1,30 @@
+{
+  "name": "backend-pokedex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:app": "nodemon api/index.js",
+    "start:db": "docker compose up -d",
+    "stop:db": "docker compose down",
+    "generate-secret": "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.1",
+    "mongoose-sequence": "^6.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "eslint": "^9.26.0",
+    "globals": "^16.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
