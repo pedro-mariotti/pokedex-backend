@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const PokeTeamSchema = new mongoose.Schema({
+  UserId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   teamName: {
     type: String,
     required: true,
