@@ -4,8 +4,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Import cors
 import db from "./database/configdb.js";
-import User from "./model/User.js";
 import userRoutes from "./routes/user.route.js";
+import pokeTeamRoutes from "./routes/pokeTeam.route.js";
 
 dotenv.config();
 db.connect();
@@ -22,6 +22,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+app.use("/api/users", userRoutes);
+app.use("/api/poketeams", pokeTeamRoutes);
 
 app.use("/users", userRoutes);
 app.get("/", (req, res) => {

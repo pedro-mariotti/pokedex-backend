@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const PokeTeamSchema = new mongoose.Schema({
   UserId: {
@@ -24,5 +24,4 @@ const PokeTeamSchema = new mongoose.Schema({
 });
 
 const PokeTeam = mongoose.model("PokeTeam", PokeTeamSchema);
-
-module.exports = PokeTeam;
+export default PokeTeam;
