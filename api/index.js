@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import express from "express";
 import dotenv from "dotenv";
@@ -11,7 +10,7 @@ dotenv.config();
 db.connect();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS with specific configuration
 const corsOptions = {
@@ -26,9 +25,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/poketeams", pokeTeamRoutes);
 
-app.use("/users", userRoutes);
 app.get("/", (req, res) => {
-  res.send(`{message: "Hello from the API!"}`);
+  res.json({ message: "Hello from the API!" });
 });
 
 app.listen(PORT, () => {
