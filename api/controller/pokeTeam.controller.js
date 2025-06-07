@@ -6,7 +6,9 @@ export const createPokeTeam = async (req, res, next) => {
   const { UserId, teamName, pokemonNames } = req.body;
 
   if (!UserId || !teamName || !pokemonNames) {
-    return res.status(400).json({ message: "UserId, teamName e pokemonNames são obrigatórios." });
+    return res
+      .status(400)
+      .json({ message: "UserId, teamName e pokemonNames são obrigatórios." });
   }
 
   try {
@@ -38,7 +40,11 @@ export const getPokeTeamsByUser = async (req, res, next) => {
   try {
     const pokeTeams = await PokeTeam.find({ UserId: userId });
     if (!pokeTeams || pokeTeams.length === 0) {
-      return res.status(404).json({ message: "Nenhuma equipe Pokémon encontrada para este usuário." });
+      return res
+        .status(404)
+        .json({
+          message: "Nenhuma equipe Pokémon encontrada para este usuário.",
+        });
     }
     res.status(200).json(pokeTeams);
   } catch (error) {
@@ -53,7 +59,9 @@ export const getPokeTeamById = async (req, res, next) => {
   try {
     const pokeTeam = await PokeTeam.findById(teamId);
     if (!pokeTeam) {
-      return res.status(404).json({ message: "Equipe Pokémon não encontrada." });
+      return res
+        .status(404)
+        .json({ message: "Equipe Pokémon não encontrada." });
     }
     res.status(200).json(pokeTeam);
   } catch (error) {
@@ -69,7 +77,9 @@ export const updatePokeTeam = async (req, res, next) => {
   try {
     const pokeTeam = await PokeTeam.findById(teamId);
     if (!pokeTeam) {
-      return res.status(404).json({ message: "Equipe Pokémon não encontrada para atualizar." });
+      return res
+        .status(404)
+        .json({ message: "Equipe Pokémon não encontrada para atualizar." });
     }
 
     // TODO: Implementar verificação de autorização.
@@ -100,7 +110,9 @@ export const deletePokeTeam = async (req, res, next) => {
   try {
     const pokeTeam = await PokeTeam.findById(teamId);
     if (!pokeTeam) {
-      return res.status(404).json({ message: "Equipe Pokémon não encontrada para deletar." });
+      return res
+        .status(404)
+        .json({ message: "Equipe Pokémon não encontrada para deletar." });
     }
 
     // TODO: Implementar verificação de autorização.
