@@ -8,7 +8,6 @@ const isValidEmail = (email) => {
 
 export const register = async (req, res) => {
     console.log("Registering user", req.body.username);
-    console.log
 
     if (!req.body.username || !req.body.password || !req.body.email) {
         console.log("Error registering user", req.body);

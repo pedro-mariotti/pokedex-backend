@@ -19,8 +19,8 @@ export const saveUser = async (req, res) => {
     //console.log("User saved", savedUser.username);
     res.status(200).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error("Error saving user", error);
-    return res.status(500).json({ message: `Error saving user:${error}` });
+    console.error("Error saving user:", error.message); // Log detalhado no servidor
+    return res.status(500).json({ message: "An error occurred while registering the user." }); // Mensagem genérica para o cliente
   }
 };
 
@@ -48,7 +48,7 @@ export const loginUser = async (req, res) => {
       userId: user._id,
     });
   } catch (error) {
-    console.error("Error logging in user", error);
-    return res.status(500).json({ message: `Error logging in user: ${error}` });
+    console.error("Error logging in user:", error.message); // Log detalhado no servidor
+    return res.status(500).json({ message: "An error occurred during login." }); // Mensagem genérica para o cliente
   }
 };
