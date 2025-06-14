@@ -19,7 +19,7 @@ Esta documentação descreve os endpoints da API do Pokedex Backend.
 
 Endpoints para gerenciar equipes Pokémon.
 
-**Prefixo Base:** `/api/poketeams` (Assumindo que este é o prefixo usado em `app.js` ou `index.js` ao registrar estas rotas)
+**Prefixo Base:** `/api/poketeams`
 
 ### `POST /api/poketeams`
 
@@ -249,7 +249,7 @@ Endpoints para gerenciar equipes Pokémon.
 
 Endpoints para gerenciar informações de cadeias de evoluções de Pokémon.
 
-**Prefixo Base:** `/api/evolution-chain` (Conforme comentário no arquivo de rota `evolution.route.js`)
+**Prefixo Base:** `/api/evolution-chain`
 
 ### `GET /api/evolution-chain/:chainId`
 
@@ -305,7 +305,7 @@ Endpoints para gerenciar informações de cadeias de evoluções de Pokémon.
 
 Endpoints para gerenciar itens do universo Pokémon.
 
-**Prefixo Base:** `/api/items` (Conforme comentário no arquivo de rota `item.route.js`)
+**Prefixo Base:** `/api/items`
 
 ### `GET /api/items/:nameOrId`
 
@@ -355,7 +355,7 @@ Endpoints para gerenciar itens do universo Pokémon.
 
 Endpoints para gerenciar dados de Pokémon.
 
-**Prefixo Base:** `/api/pokemon` (Conforme comentário no arquivo de rota `pokemon.route.js`)
+**Prefixo Base:** `/api/pokemon`
 
 ### `GET /api/pokemon`
 
@@ -561,7 +561,7 @@ Endpoints para gerenciar dados de Pokémon.
 
 Endpoints para gerenciar os tipos de Pokémon.
 
-**Prefixo Base:** `/api/types` (Conforme comentário no arquivo de rota `type.route.js`)
+**Prefixo Base:** `/api/types`
 
 ### `GET /api/types/:nameOrId`
 
@@ -690,7 +690,7 @@ Endpoints para gerenciar os tipos de Pokémon.
 
 Endpoints para gerenciar usuários (registro e login).
 
-**Prefixo Base:** `/api/auth` (Comum para rotas de autenticação, mas pode ser `/api/users` dependendo de como você configurou em `app.js` ou `index.js`)
+**Prefixo Base:** `/api/auth`
 
 ### `POST /api/auth/register`
 
