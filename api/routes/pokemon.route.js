@@ -1,15 +1,22 @@
 import express from 'express';
 const router = express.Router();
-import * as pokemonController from '../controller/pokemon.controller.js';
+// A importação do controller pode não ser mais necessária aqui, pois o pokemon.handler.js
+// agora é responsável por chamar os métodos do controller.
 
 // Rota para listar Pokémon (com paginação opcional via query params limit e offset)
-router.get('/', pokemonController.getPokemonList); // Corresponde a /api/pokemon
+// A rota GET /api/pokemon agora é gerenciada por:
+// 1. Configuração do API Gateway que aponta para a função serverless pokemon.handler.js
+// 2. O arquivo api/handlers/pokemon.handler.js que processa o evento e chama
+//    pokemonController.getPokemonList.
 
 // Rota para buscar detalhes de um Pokémon específico pelo nome ou ID
-router.get('/:nameOrId', pokemonController.getPokemonDetails); // Corresponde a /api/pokemon/:nameOrId
+// A rota GET /api/pokemon/:nameOrId agora é gerenciada pelo pokemon.handler.js
+// que chama pokemonController.getPokemonDetails.
 
-router.get('/:nameOrId/species', pokemonController.getPokemonSpeciesDetails); // Corresponde a /api/pokemon/:nameOrId/species
+// A rota GET /api/pokemon/:nameOrId/species agora é gerenciada pelo pokemon.handler.js
+// que chama pokemonController.getPokemonSpeciesDetails.
 
-router.get('/:nameOrId/evolution', pokemonController.getPokemonEvolution); // Corresponde a /api/pokemon/:nameOrId/evolution
+// A rota GET /api/pokemon/:nameOrId/evolution agora é gerenciada pelo pokemon.handler.js
+// que chama pokemonController.getPokemonEvolution.
 
 export default router;
