@@ -13,12 +13,8 @@ import { login, register } from '../controller/user.controller.js';
  * O corpo da requisição (event.body) conterá os dados para registro ou login.
  */
 
-const USER_ALLOWED_METHODS = 'POST,OPTIONS';
-const commonHeaders = {
+const handlerResponseHeaders = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-    'Access-Control-Allow-Methods': USER_ALLOWED_METHODS,
 };
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
@@ -26,6 +22,7 @@ export const handler = async (event) => {
     const path = event.path; // e.g., "/api/users/register" ou "/api/users/login"
     // pathParameters não são esperados para estas rotas
     // queryStringParameters não são tipicamente usados para POST de login/registro
+    console.log(`[user.handler] Evento recebido: ${httpMethod} ${path}`);
 
     let body = {};
     if (event.body) {
@@ -36,7 +33,7 @@ export const handler = async (event) => {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error: "Invalid JSON body" }),
-                headers: commonHeaders,
+                headers: handlerResponseHeaders,
             };
         }
     } else {
@@ -44,7 +41,7 @@ export const handler = async (event) => {
         return {
             statusCode: 400,
             body: JSON.stringify({ error: "Request body is missing" }),
-            headers: commonHeaders,
+            headers: handlerResponseHeaders,
         };
     }
 
@@ -54,6 +51,7 @@ export const handler = async (event) => {
         body: body,
         headers: event.headers,
     };
+    console.log(`[user.handler] Corpo do mockReq para o controller:`, mockReq.body);
 
     let responsePayload;
     let statusCode = 200;
@@ -74,14 +72,17 @@ export const handler = async (event) => {
     try {
         if (httpMethod === 'POST' && (path === '/api/users/register' || path.endsWith('/register'))) {
             await register(mockReq, mockRes);
+            console.log(`[user.handler] Após controller de registro. statusCode: ${statusCode}, responsePayload:`, responsePayload);
         } else if (httpMethod === 'POST' && (path === '/api/users/login' || path.endsWith('/login'))) {
             await login(mockReq, mockRes);
+            console.log(`[user.handler] Após controller de login. statusCode: ${statusCode}, responsePayload:`, JSON.stringify(responsePayload));
         } else {
             statusCode = 404;
             responsePayload = { error: `Route not found or method not allowed for ${httpMethod} ${path}` };
+            console.log(`[user.handler] Rota não encontrada. statusCode: ${statusCode}, responsePayload:`, responsePayload);
         }
     } catch (error) {
-        console.error(`Error in user.handler for ${httpMethod} ${path}:`, error);
+        console.error(`[user.handler] Erro para ${httpMethod} ${path}:`, error.message, error.stack);
         statusCode = error.statusCode || 500;
         responsePayload = { error: 'Internal Server Error', message: error.message };
         if (error.isHttpError && error.body) { // Para erros já formatados
@@ -92,6 +93,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: commonHeaders,
+        headers: handlerResponseHeaders,
     };
 };

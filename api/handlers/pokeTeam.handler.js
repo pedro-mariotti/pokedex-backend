@@ -23,12 +23,8 @@ import {
  * e passá-los no objeto `event.pathParameters`.
  */
 
-const POKETEAM_ALLOWED_METHODS = 'POST,GET,PUT,DELETE,OPTIONS';
 const commonHeaders = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/', // Considere tornar configurável via variáveis de ambiente
-    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-    'Access-Control-Allow-Methods': POKETEAM_ALLOWED_METHODS,
 };
 
 export const handler = async (event) => {
