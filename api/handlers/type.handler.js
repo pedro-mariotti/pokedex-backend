@@ -12,6 +12,14 @@ import { getTypeDetails } from '../controller/type.controller.js';
  * O API Gateway é responsável por extrair o parâmetro do caminho (nameOrId)
  * e passá-lo no objeto `event.pathParameters`.
  */
+
+const TYPE_ALLOWED_METHODS = 'GET,OPTIONS';
+const commonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': TYPE_ALLOWED_METHODS,
+};
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
     const httpMethod = event.httpMethod; // e.g., "GET"
@@ -20,13 +28,22 @@ export const handler = async (event) => {
     const queryStringParameters = event.queryStringParameters || {};
     // Não esperamos corpo para uma requisição GET de tipo
 
-    // Simulação dos objetos 'req' e 'res' do Express para manter a compatibilidade
+    // Simulação dos objetos 'req' e 'res' do Express para manter a compatibilidade 
     // com o controlador existente.
     const mockReq = {
         params: pathParameters,
         query: queryStringParameters,
         headers: event.headers,
-        body: event.body ? JSON.parse(event.body) : {}, // Incluído por consistência
+        body: {}, // Inicializa body como objeto vazio
+    };
+
+    // Tenta parsear o body apenas se ele existir
+    if (event.body) {
+        try {
+            mockReq.body = JSON.parse(event.body);
+        } catch (parseError) {
+            console.warn("Warning: Request body received and failed to parse for a GET request:", parseError);
+        }
     };
 
     let responsePayload;
@@ -65,11 +82,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-            'Access-Control-Allow-Methods': 'GET,OPTIONS', // Métodos que esta função suporta
-        },
+        headers: commonHeaders,
     };
 };
