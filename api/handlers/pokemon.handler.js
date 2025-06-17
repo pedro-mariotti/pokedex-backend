@@ -20,6 +20,14 @@ import {
  * O API Gateway é responsável por extrair o parâmetro do caminho (nameOrId)
  * e passá-lo no objeto `event.pathParameters`.
  */
+
+const POKEMON_ALLOWED_METHODS = 'GET,OPTIONS';
+const commonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': POKEMON_ALLOWED_METHODS,
+};
 export const handler = async (event) => {
     const httpMethod = event.httpMethod;
     const path = event.path;
@@ -31,7 +39,16 @@ export const handler = async (event) => {
         params: pathParameters,
         query: queryStringParameters,
         headers: event.headers,
-        body: event.body ? JSON.parse(event.body) : {}, // Incluído por consistência
+        body: {}, // Inicializa body como objeto vazio
+    };
+
+    // Tenta parsear o body apenas se ele existir
+    if (event.body) {
+        try {
+            mockReq.body = JSON.parse(event.body);
+        } catch (parseError) {
+            console.warn("Warning: Request body received and failed to parse for a GET request:", parseError);
+        }
     };
 
     let responsePayload;
@@ -90,11 +107,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-            'Access-Control-Allow-Methods': 'GET,OPTIONS', // Métodos que esta função suporta
-        },
+        headers: commonHeaders,
     };
 };

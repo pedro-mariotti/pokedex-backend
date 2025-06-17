@@ -22,6 +22,15 @@ import {
  * O API Gateway é responsável por extrair os parâmetros do caminho (userId, teamId)
  * e passá-los no objeto `event.pathParameters`.
  */
+
+const POKETEAM_ALLOWED_METHODS = 'POST,GET,PUT,DELETE,OPTIONS';
+const commonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/', // Considere tornar configurável via variáveis de ambiente
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': POKETEAM_ALLOWED_METHODS,
+};
+
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
     const httpMethod = event.httpMethod; // e.g., "GET", "POST"
@@ -37,7 +46,7 @@ export const handler = async (event) => {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error: "Invalid JSON body" }),
-                headers: { 'Content-Type': 'application/json' },
+                headers: commonHeaders,
             };
         }
     }
@@ -95,11 +104,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-            'Access-Control-Allow-Methods': 'POST,GET,PUT,DELETE,OPTIONS', // Métodos que esta função suporta
-        },
+        headers: commonHeaders,
     };
 };

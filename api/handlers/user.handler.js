@@ -12,6 +12,14 @@ import { login, register } from '../controller/user.controller.js';
  *
  * O corpo da requisição (event.body) conterá os dados para registro ou login.
  */
+
+const USER_ALLOWED_METHODS = 'POST,OPTIONS';
+const commonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': USER_ALLOWED_METHODS,
+};
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
     const httpMethod = event.httpMethod; // e.g., "POST"
@@ -28,10 +36,7 @@ export const handler = async (event) => {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error: "Invalid JSON body" }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-                 },
+                headers: commonHeaders,
             };
         }
     } else {
@@ -39,10 +44,7 @@ export const handler = async (event) => {
         return {
             statusCode: 400,
             body: JSON.stringify({ error: "Request body is missing" }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            },
+            headers: commonHeaders,
         };
     }
 
@@ -90,11 +92,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-            'Access-Control-Allow-Methods': 'POST,OPTIONS', // Métodos que esta função suporta
-        },
+        headers: commonHeaders,
     };
 };

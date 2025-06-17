@@ -12,6 +12,14 @@ import { getEvolutionChainById } from '../controller/evolution.controller.js';
  * O API Gateway é responsável por extrair o parâmetro do caminho (chainId)
  * e passá-lo no objeto `event.pathParameters`.
  */
+
+const EVOLUTION_ALLOWED_METHODS = 'GET,OPTIONS';
+const commonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': EVOLUTION_ALLOWED_METHODS,
+};
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
     const httpMethod = event.httpMethod; // e.g., "GET"
@@ -26,8 +34,16 @@ export const handler = async (event) => {
         params: pathParameters,
         query: queryStringParameters,
         headers: event.headers,
-        // body não é geralmente usado em GET, mas incluído por consistência se necessário
-        body: event.body ? JSON.parse(event.body) : {},
+        body: {}, // Inicializa body como objeto vazio
+    };
+
+    // Tenta parsear o body apenas se ele existir, comum para outros métodos, mas GET não deve ter body significativo
+    if (event.body) {
+        try {
+            mockReq.body = JSON.parse(event.body);
+        } catch (parseError) {
+            console.warn("Warning: Request body received and failed to parse for a GET request:", parseError);
+        }
     };
 
     let responsePayload;
@@ -66,11 +82,6 @@ export const handler = async (event) => {
     return {
         statusCode: statusCode,
         body: JSON.stringify(responsePayload),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-            'Access-Control-Allow-Methods': 'GET,OPTIONS', // Métodos que esta função suporta
-        },
+        headers: commonHeaders,
     };
 };
