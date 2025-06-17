@@ -1,42 +1,57 @@
 import express from "express";
-// A importação do controller pode não ser mais necessária aqui, pois o pokeTeam.handler.js
-// agora é responsável por chamar os métodos do controller.
-// import {
-//   createPokeTeam,
-//   getPokeTeamsByUser,
-//   getPokeTeamById,
-//   updatePokeTeam,
-//   deletePokeTeam,
-// } from "../controller/pokeTeam.controller.js";
-
+import { handler as pokeTeamHandler } from '../handlers/pokeTeam.handler.js';
 
 const router = express.Router();
 
-// Rota para criar uma nova equipe Pokémon
+// Função auxiliar
+async function callApiHandler(req, res, next, handlerFunction, expectedBasePath) {
+    try {
+        const event = {
+            httpMethod: req.method,
+            path: `${expectedBasePath}${req.path === '/' && Object.keys(req.params).length === 0 ? '' : req.path}`,
+            pathParameters: req.params,
+            queryStringParameters: req.query,
+            headers: req.headers,
+            body: req.body && Object.keys(req.body).length > 0 ? JSON.stringify(req.body) : null,
+        };
+        if (event.path !== expectedBasePath && event.path.endsWith('/')) {
+            event.path = event.path.slice(0, -1);
+        }
+        const result = await handlerFunction(event);
+        if (result.headers) {
+            res.set(result.headers);
+        }
+        res.status(result.statusCode).send(result.body);
+    } catch (error) {
+        next(error);
+    }
+}
+
+const POKETEAM_BASE_PATH = '/api/poketeams';
+
 // POST /api/poketeams
-// A rota POST /api/poketeams agora é gerenciada por:
-// 1. Configuração do API Gateway que aponta para a função serverless pokeTeam.handler.js
-// 2. O arquivo api/handlers/pokeTeam.handler.js que processa o evento e chama
-//    pokeTeamController.createPokeTeam.
+router.post('/', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
 
-// Rota para buscar todas as equipes de um usuário específico
 // GET /api/poketeams/user/:userId
-// A rota GET /api/poketeams/user/:userId agora é gerenciada pelo pokeTeam.handler.js
-// que chama pokeTeamController.getPokeTeamsByUser.
+router.get('/user/:userId', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
 
-// Rota para buscar detalhes de uma equipe Pokémon específica (inclui nome, pokémons, ID do criador)
 // GET /api/poketeams/:teamId
-// A rota GET /api/poketeams/:teamId agora é gerenciada pelo pokeTeam.handler.js
-// que chama pokeTeamController.getPokeTeamById.
+router.get('/:teamId', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
 
-// Rota para editar uma equipe Pokémon
 // PUT /api/poketeams/:teamId
-// A rota PUT /api/poketeams/:teamId agora é gerenciada pelo pokeTeam.handler.js
-// que chama pokeTeamController.updatePokeTeam.
+router.put('/:teamId', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
 
-// Rota para apagar uma equipe Pokémon
 // DELETE /api/poketeams/:teamId
-// A rota DELETE /api/poketeams/:teamId agora é gerenciada pelo pokeTeam.handler.js
-// que chama pokeTeamController.deletePokeTeam.
+router.delete('/:teamId', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
 
 export default router;
