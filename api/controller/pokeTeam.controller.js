@@ -44,7 +44,14 @@ export const getPokeTeamsByUser = async (req, res, next) => {
         message: "Nenhuma equipe Pokémon encontrada para este usuário.",
       });
     }
-    res.status(200).json(pokeTeams);
+    // Map teams to include the MongoDB _id as 'id'
+    const teamsWithId = pokeTeams.map((team) => ({
+      id: team._id,
+      teamName: team.teamName,
+      pokemonNames: team.pokemonNames,
+      UserId: team.UserId,
+    }));
+    res.status(200).json(teamsWithId);
   } catch (error) {
     next(error);
   }
