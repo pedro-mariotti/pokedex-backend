@@ -13,12 +13,8 @@ import { getTypeDetails } from '../controller/type.controller.js';
  * e passá-lo no objeto `event.pathParameters`.
  */
 
-const TYPE_ALLOWED_METHODS = 'GET,OPTIONS';
 const commonHeaders = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'https://pokeapi-pokedex-4byk.vercel.app/',
-    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-    'Access-Control-Allow-Methods': TYPE_ALLOWED_METHODS,
 };
 export const handler = async (event) => {
     // Extrai informações relevantes do evento do API Gateway
