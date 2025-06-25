@@ -32,3 +32,12 @@ export const findTeamsByTeamName = async (teamName) => {
     const teams = await PokeTeam.find({ teamName: { $regex: teamName, $options: 'i' } });
     return teams;
 };
+
+/**
+ * Encontra todos os PokeTeams no banco de dados.
+ * @returns {Promise<Array>} Uma promessa que resolve para um array de todos os PokeTeams.
+ */
+export const findAllTeams = async () => {
+    const teams = await PokeTeam.find({});
+    return teams;
+};
