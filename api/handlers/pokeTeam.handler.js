@@ -4,6 +4,7 @@ import {
   getPokeTeamById,
   updatePokeTeam,
   deletePokeTeam,
+  searchPokeTeams, // Importar o novo controller
 } from '../controller/pokeTeam.controller.js';
 
 /**
@@ -16,6 +17,7 @@ import {
  * - POST /api/poketeams
  * - GET /api/poketeams/user/{userId}
  * - GET /api/poketeams/{teamId}
+ * - GET /api/poketeams/search?username={username} ou ?teamName={teamName}
  * - PUT /api/poketeams/{teamId}
  * - DELETE /api/poketeams/{teamId}
  *
@@ -76,6 +78,8 @@ export const handler = async (event) => {
         // Lógica de roteamento interna baseada no método HTTP e nos parâmetros de caminho
         if (httpMethod === 'POST' && (path === '/api/poketeams' || path === '/api/poketeams/')) {
             await createPokeTeam(mockReq, mockRes);
+        } else if (httpMethod === 'GET' && path.startsWith('/api/poketeams/search')) {
+            await searchPokeTeams(mockReq, mockRes);
         } else if (httpMethod === 'GET' && path.startsWith('/api/poketeams/user/') && pathParameters.userId) {
             await getPokeTeamsByUser(mockReq, mockRes);
         } else if (httpMethod === 'PUT' && pathParameters.teamId && path.startsWith('/api/poketeams/') && !path.includes('/user/')) {
