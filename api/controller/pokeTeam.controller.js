@@ -1,5 +1,6 @@
 import PokeTeam from "../model/PokeTeam.js";
 import User from "../model/User.js"; // Import User model if needed for validation
+import { findTeamsByUsername, findTeamsByTeamName } from '../services/pokeTeam.services.js';
 
 // Criar uma nova PokeTeam
 export const createPokeTeam = async (req, res, next) => {
@@ -31,6 +32,34 @@ export const createPokeTeam = async (req, res, next) => {
       return res.status(400).json({ message: error.message });
     }
     next(error);
+  }
+};
+
+// Pesquisar por PokeTeams
+export const searchPokeTeams = async (req, res, next) => {
+  const { username, teamName } = req.query;
+
+  if (!username && !teamName) {
+    return res.status(400).json({
+      message: "Please provide a search query parameter: 'username' or 'teamName'.",
+    });
+  }
+
+  try {
+    let teams = [];
+    if (username) {
+      teams = await findTeamsByUsername(username);
+    } else if (teamName) {
+      teams = await findTeamsByTeamName(teamName);
+    }
+
+    if (teams.length === 0) {
+      return res.status(404).json({ message: "No teams found matching the criteria." });
+    }
+
+    res.status(200).json(teams);
+  } catch (error) {
+    next(error); // Passa o erro para o middleware de erro (que no caso é o handler)
   }
 };
 

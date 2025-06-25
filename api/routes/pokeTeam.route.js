@@ -34,6 +34,11 @@ router.post('/', (req, res, next) => {
     callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
 });
 
+// GET /api/poketeams/search
+router.get('/search', (req, res, next) => {
+    callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
+});
+
 // GET /api/poketeams/user/:userId
 router.get('/user/:userId', (req, res, next) => {
     callApiHandler(req, res, next, pokeTeamHandler, POKETEAM_BASE_PATH);
