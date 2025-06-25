@@ -2,14 +2,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Import cors
-import db from "./database/configdb.js";
-import userRoutes from "./routes/user.route.js";
-import pokeTeamRoutes from "./routes/pokeTeam.route.js";
+import db from "../app/database/configdb.js";
+import userRoutes from "../app/routes/user.route.js";
+import pokeTeamRoutes from "../app/routes/pokeTeam.route.js";
 // Importar as novas rotas relacionadas à PokeAPI
-import pokemonApiRoutes from "./routes/pokemon.route.js"; // Para /api/pokemon, /api/pokemon/:id, etc.
-import typeApiRoutes from "./routes/type.route.js";       // Para /api/types
-import evolutionApiRoutes from "./routes/evolution.route.js"; // Para /api/evolution-chain
-import itemApiRoutes from "./routes/item.route.js";         // Para /api/items
+import pokemonApiRoutes from "../app/routes/pokemon.route.js"; // Para /api/pokemon, /api/pokemon/:id, etc.
+import typeApiRoutes from "../app/routes/type.route.js"; // Para /api/types
+import evolutionApiRoutes from "../app/routes/evolution.route.js"; // Para /api/evolution-chain
+import itemApiRoutes from "../app/routes/item.route.js"; // Para /api/items
 
 dotenv.config();
 db.connect();
@@ -35,20 +35,19 @@ app.use("/api/types", typeApiRoutes);
 app.use("/api/evolution-chain", evolutionApiRoutes);
 app.use("/api/items", itemApiRoutes);
 
-
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the API!" });
 });
 
 // Middleware de tratamento de erros centralizado
 // Deve ser o último middleware adicionado
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error("Unhandled error:", err.stack || err); // Log do stack trace para melhor debugging
   const statusCode = err.status || err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  const message = err.message || "Internal Server Error";
   res.status(statusCode).json({
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }) // Opcional: envia stack trace em desenvolvimento
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }), // Opcional: envia stack trace em desenvolvimento
   });
 });
 
