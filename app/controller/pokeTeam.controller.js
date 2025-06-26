@@ -1,6 +1,10 @@
 import PokeTeam from "../model/PokeTeam.js";
 import User from "../model/User.js"; // Import User model if needed for validation
-import { findTeamsByUsername, findTeamsByTeamName, findAllTeams } from '../services/pokeTeam.services.js';
+import {
+  findTeamsByUsername,
+  findTeamsByTeamName,
+  findAllTeams,
+} from "../services/pokeTeam.services.js";
 
 // Criar uma nova PokeTeam
 export const createPokeTeam = async (req, res, next) => {
@@ -66,7 +70,7 @@ export const getPokeTeamsByUser = async (req, res, next) => {
     }
     // Map teams to include the MongoDB _id as 'id'
     const teamsWithId = pokeTeams.map((team) => ({
-      id: team._id,
+      teamId: team._id,
       teamName: team.teamName,
       pokemonNames: team.pokemonNames,
       UserId: team.UserId,
